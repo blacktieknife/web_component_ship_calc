@@ -1,12 +1,9 @@
-import {LitElement, html} from '../lit-element/lit-element.js';
+import {LitElement, html} from '../../../dependencies/lit-element/lit-element.js';
 
 class ShipEstimates extends LitElement {
     static get properties() {
         return {
-          categories: {type:Array},
           totalPcs:{type:Number},
-          smallBoxNum:{type:Number},
-          smallBoxWeightTotal:{type:Number},
           selectedCat:{type:String}
         }
     }
