@@ -5,8 +5,6 @@ class ShipCalcForm extends LitElement {
         return {
           category: {type:String},
           totalPcs:{type:Number},
-          //boxes:{type:Array},
-         //saved:{type:Array}
         }
     }
     constructor(){
@@ -28,10 +26,10 @@ class ShipCalcForm extends LitElement {
             <h4>Calculate UPS rates</h4>
             <form @submit=${(e)=>{e.preventDefault()}}>
                 <label for="pcs_num_input">Total Pcs.</label>
-                <input type="number" id="pcs_num_input" @change=${this.handleTotalPcsChange}/>
+                <input type="number" id="pcs_num_input" @input=${this.handleTotalPcsChange} .value=${this.totalPcs}>
                 <br />
                 <label for="cat_input">Select Category</label>
-                <select id="cat_input" @change=${this.handleCategoryChange}>
+                <select id="cat_input" @change=${this.handleCategoryChange} .value=${this.category}>
                     <option value="">Select Category</option>
                     ${this.categories.map((style)=>{
                         return html`
@@ -56,14 +54,15 @@ class ShipCalcForm extends LitElement {
     }
     handleTotalPcsChange(e){
         this.totalPcs = e.target.value;
-        if (this.totalPcs > 0) {
-            this.setEstimates();
-            this.dispatchEvent(new CustomEvent("currentTotalPcs", {detail:this.totalPcs}));
-        }
-        
+        this.dispatchEvent(new CustomEvent("currentTotalPcs", {detail:this.totalPcs || 0}));
+        this.setEstimates();  
     }
     handleAddCategory(){
         this.dispatchEvent(new CustomEvent("addCategory"));
+        document.getElementById("pcs_num_input")
+        this.category = "";
+        this.totalPcs = 0;
+
     }
     setEstimates(){
         if(this.category && this.totalPcs > 0) {
@@ -75,7 +74,7 @@ class ShipCalcForm extends LitElement {
         this.largeBoxWeightPerBox = 0;
         this.mediumBoxNum = 0;
         this.mediumBoxWeightTotal = 0;
-        this.mediumBoxWeightPerBox = 0;
+        this.mediumBoxWeightPerBox = 0;  
         const cat = this.categories.find((el)=>el.category == this.category);
         if (this.totalPcs <= cat.maxPcsSmBox) {
             this.smallBoxNum = Math.ceil(this.totalPcs / cat.maxPcsSmBox);
@@ -173,16 +172,10 @@ class ShipCalcForm extends LitElement {
                 }
             }
             this.dispatchEvent(new CustomEvent("updateBoxesArray",{detail:boxes}));
+        } else {
+            this.dispatchEvent(new CustomEvent("clearBoxesArray"));
         }
-    }
+    } 
 }
 
-{/* <button @click="${()=>{this.decrement()}}">decrease</button> */}
-{/* <button @click="${()=>{this.increment()}}">increase</button> */}
 customElements.define("calc-form", ShipCalcForm);
-// export default function(data) {
-//     return html`
-//     <h4>${data.title}</h4>
-//     <button >increament</button>
-//     `;
-// }
