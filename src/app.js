@@ -2,6 +2,7 @@ import {LitElement, html} from '../dependencies/lit-element/lit-element.js';
 import './components/shipCalcForm/ShipCalcForm.js';
 import './components/shipEstimates/ShipEstimates.js';
 import './components/savedBoxes/SavedBoxes.js';
+import appStyle from './appStyle.js';
 import {repeat} from "../dependencies/lit/directives/repeat.js";
 import {until} from "../dependencies/lit/directives/until.js";
 
@@ -24,28 +25,41 @@ class ShipCostCalc extends LitElement {
     }
     render(){
         return html`
+        <style>
+            ${appStyle}
+        </style>
+        <div class="container">
+            <div class="header_section">
             style:${this.selectedCategory} | totalPcs:${this.currentTotalPcs}
-            <calc-form 
-                .savedCategories=${this.currentSavedCategories}
-                @categorySelected=${this.handleSelectedCategory} 
-                @currentTotalPcs=${this.handleCurrentTotal}
-                @updateBoxesArray=${this.handleUpdateBoxes}
-                @clearBoxesArray=${this.handleClearBoxes}
-                @addCategory=${this.handleAddCategory}
-                >
-            </calc-form>
-            ${this.currentBoxes.length > 0 || this.saved.length > 0 ? html`
-            <ship-estimates 
-                .boxes=${this.currentBoxes.concat(this.saved)} 
-                .totalPcs=${this.currentTotalPcs} 
-                .selectedCat=${this.selectedCategory}>
-            </ship-estimates>` : ""}
+            </div>
+            <div class="container-flex">
+                <div style="display:inline-flex">
+                    <calc-form 
+                        .savedCategories=${this.currentSavedCategories}
+                        @categorySelected=${this.handleSelectedCategory} 
+                        @currentTotalPcs=${this.handleCurrentTotal}
+                        @updateBoxesArray=${this.handleUpdateBoxes}
+                        @clearBoxesArray=${this.handleClearBoxes}
+                        @addCategory=${this.handleAddCategory}
+                        >
+                    </calc-form>
+                </div>
+                <div style="display:inline-flex">
+                    ${this.currentBoxes.length > 0 || this.saved.length > 0 ? html`
+                    <ship-estimates
+                        .boxes=${this.currentBoxes.concat(this.saved)} 
+                        .totalPcs=${this.currentTotalPcs} 
+                        .selectedCat=${this.selectedCategory}>
+                    </ship-estimates>` : ""}
+                </div>
+            </div>
             ${this.saved.length > 0 ? 
                 html`<saved-boxes 
                     .saved=${this.saved}
                 >
                 </saved-boxes>
             `: null }
+        </div>
         `;
     }
     handleSelectedCategory(e) {

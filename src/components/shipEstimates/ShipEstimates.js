@@ -1,5 +1,5 @@
 import {LitElement, html} from '../../../dependencies/lit-element/lit-element.js';
-
+import shipEstimatesStyle from './shipEstimatesStyle.js';
 class ShipEstimates extends LitElement {
     static get properties() {
         return {
@@ -23,13 +23,19 @@ class ShipEstimates extends LitElement {
     render(){
         this.parseBoxes();
         return html`
-        <h4>Estimates Total Boxes ${this.boxes.length}</h4>
-        small Box's:${this.smallBoxNum} | weight(per box):${this.smallBoxWeightPerBox} | total weight:${this.smallBoxWeightTotal}
-        <br />
-        medium Box's:${this.mediumBoxNum}| weight(per box):${this.mediumBoxWeightPerBox} | total weight:${this.mediumBoxWeightTotal}
-        <br />
-        large Box's:${this.largeBoxNum} | weight(per box):${this.largeBoxWeightPerBox} | total weight:${this.largeBoxWeightTotal}
-        <br />
+        <h3>Estimates</h3>
+        Total Boxes ${this.boxes.length > 50 ? html`${this.boxes.length} <span style="color:#e80000;font-weight:bolder;">! Too many packages <small>(50 Pkg. Limit)</small></span> ` : html`${this.boxes.length}`}</h4>
+        <div class="container-flex">
+            small Box's:${this.smallBoxNum} | weight(per box):${this.smallBoxWeightPerBox} | total weight:${this.smallBoxWeightTotal}
+            <br />
+            medium Box's:${this.mediumBoxNum}| weight(per box):${this.mediumBoxWeightPerBox} | total weight:${this.mediumBoxWeightTotal}
+            <br />
+            large Box's:${this.largeBoxNum} | weight(per box):${this.largeBoxWeightPerBox} | total weight:${this.largeBoxWeightTotal}
+            <br />
+        </div>
+        <style>
+        ${shipEstimatesStyle}
+        </style>
         `;   
     }
     parseBoxes() {

@@ -1,5 +1,5 @@
 import {LitElement, html} from '../../../dependencies/lit-element/lit-element.js';
-
+import savedBoxesStyle from './savedBoxesStyle.js';
 class SavedBoxes extends LitElement {
     static get properties() {
         return {
@@ -12,21 +12,25 @@ class SavedBoxes extends LitElement {
     }
     render(){
         return html`
-                <div>
-                    <h4>Saved Boxes</h4>
+               
+                <div class="container-flex" style="flex-direction:column;">
+                <h3>Saved Boxes</h3>
                     ${this.reduceSaved().map(category=>{
                         return html`
-                        <div>
-                            <span>${category.category}</span>
-                            <span>boxes : ${category.totalBoxes}</span>
-                            <span>weight : ${category.totalWeight}</span>
-                        </div>
+                            ${category.category}
+                            boxes : ${category.totalBoxes}
+                            weight : ${category.totalWeight}
+                            <br />       
                         `;
                      })} 
                 </div>
+                <style>
+                ${savedBoxesStyle}
+                </style>
             `;
     }
     reduceSaved() {
+        console.log("Cureent saved boxes",this.saved);
         const seenCategories = [];
         this.saved.forEach((box)=>{
             if (!seenCategories.find((el)=>el.category == box.category)) {

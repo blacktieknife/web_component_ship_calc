@@ -12,26 +12,29 @@ class ShipCalcForm extends LitElement {
     constructor(){
         super();
         this.category = null;
-        this.totalPcs = 0;
+        this.totalPcs = "";
         this.boxes = new Boxes();
     }
     render(){
         return html`
-            <h4>Calculate UPS rates</h4>
+            <h3>Calculate UPS rates</h3>
             <form @submit=${(e)=>{e.preventDefault()}}>
-                <label for="pcs_num_input">Total Pcs.</label>
-                <input type="number" id="pcs_num_input" @input=${this.handleTotalPcsChange} .value=${this.totalPcs}>
-                <br />
-                <label for="cat_input">Select Category</label>
-                <select id="cat_input" @change=${this.handleCategoryChange} .value=${this.category}>
-                    <option value="">Select Category</option>
-                    ${this.boxes.categories.map((style)=>{
-                        return html`
-                            <option ?disabled=${this.savedCategories.includes(style.category)} .title="${this.savedCategories.includes(style.category) ? 'Option Already Selected' : ''}" .value="${style.category}">${style.name}</option>
-                        `;
-                    })}
-                </select>
-                <button title="Add multiple categories to shipment" type="button" ?disabled=${this.category == '' || this.category == null || this.totalPcs < 1} class="btn btn-primary btn-sm" id="add_cat_btn" @click=${this.handleAddCategory}>Add Category</button>
+                <div>
+                    <label for="pcs_num_input">Total Pcs.</label>
+                    <input type="number" id="pcs_num_input" @input=${this.handleTotalPcsChange} .value=${this.totalPcs}>
+                </div>
+                <div>
+                    <label for="cat_input">Select Category</label>
+                    <select id="cat_input" @change=${this.handleCategoryChange} .value=${this.category}>
+                        <option value="">Select Category</option>
+                        ${this.boxes.categories.map((style)=>{
+                            return html`
+                                <option ?disabled=${this.savedCategories.includes(style.category)} .title="${this.savedCategories.includes(style.category) ? 'Option Already Selected' : ''}" .value="${style.category}">${style.name}</option>
+                            `;
+                        })}
+                    </select>
+                    <button title="Add multiple categories to shipment" type="button" ?disabled=${this.category == '' || this.category == null || this.totalPcs < 1} class="btn btn-primary btn-sm" id="add_cat_btn" @click=${this.handleAddCategory} style="border:none;border-radius:50%;font-weight:bold;font-size:14px;padding:2px;min-width:22px;">&nbsp;+&nbsp;</button>
+                </div>
             </form>
             <style>
                 ${shipCalcFormStyle}
