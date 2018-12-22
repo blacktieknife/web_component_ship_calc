@@ -39,7 +39,7 @@ class ShipEstimates extends LitElement {
             ${this.boxes.length < 50 ? html`
                 <label for="zip_input">Zip:</label>
                 <input id="zip_input" type="text" @input=${this.updateZip} .value=${this.zipCode} style="width:78px;"/>
-                <button ?disabled=${this.malformedZip} @click=${this.handleGetRates}>Get Rates</button>` : html`
+                <button ?disabled=${this.malformedZip} @click=${this.handleGetRates} class="btn btn-sm">Get Rates</button>` : html`
                 <span style="color:#e80000;font-weight:bolder;">! Too many packages <small>(50 Pkg. Limit)</small></span>`}
                 
             </div>
@@ -89,6 +89,7 @@ class ShipEstimates extends LitElement {
     handleGetRates(){
         if(!this.malformedZip) {
             console.log("do stuff with this.boxes && other things",this.zipCode);
+            this.dispatchEvent(new CustomEvent("getRates", {detail:this.boxes}))
         } else {
             alert("Malformed zip code.");
         }

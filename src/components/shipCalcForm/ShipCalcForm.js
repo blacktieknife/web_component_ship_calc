@@ -64,9 +64,9 @@ class ShipCalcForm extends LitElement {
         this.totalPcs = 0;
 
     }
-    setEstimates(){
-        const calulatedBoxes = this.boxes.returnBoxes(this.category, this.totalPcs);
+    setEstimates(){ 
         if(this.category && this.totalPcs > 0) {
+            const calulatedBoxes = this.boxes.returnBoxes(this.category, this.totalPcs);
             this.dispatchEvent(new CustomEvent("updateBoxesArray",{detail:calulatedBoxes}));
         } else {
             this.dispatchEvent(new CustomEvent("clearBoxesArray"));

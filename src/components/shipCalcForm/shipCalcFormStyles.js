@@ -18,7 +18,7 @@ input {
     font-size:22px;
     font-weight:bold;
     border-radius:4px;
-    background-color:#FFF5B5;
+    background-color:#CAF7CA;
 }
 select {
     padding:10px;
@@ -87,6 +87,7 @@ fieldset[disabled] .btn.focus {
     color: #337ab7;
     background-color: #AFAFAF;
 }
+
 .btn-sm,
 .btn-group-sm > .btn {
   padding: 5px 10px;

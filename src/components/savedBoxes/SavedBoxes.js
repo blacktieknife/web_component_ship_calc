@@ -13,14 +13,10 @@ class SavedBoxes extends LitElement {
     render(){
         return html`
                
-                <div class="container-flex" style="flex-direction:column;">
-                <h3>Saved Boxes</h3>
+                <div class="container-flex" style="flex-wrap:wrap;">
                     ${this.reduceSaved().map(category=>{
                         return html`
-                            ${category.category}
-                            boxes : ${category.totalBoxes}
-                            weight : ${category.totalWeight}
-                            <br />       
+                         <div class="saved_box_badge">${category.name}</div>   
                         `;
                      })} 
                 </div>
@@ -34,10 +30,10 @@ class SavedBoxes extends LitElement {
         const seenCategories = [];
         this.saved.forEach((box)=>{
             if (!seenCategories.find((el)=>el.category == box.category)) {
-                seenCategories.push({category:box.category, totalBoxes:1, totalWeight:box.weight});
+                seenCategories.push({category:box.category, name:box.name, totalBoxes:1, totalWeight:box.weight});
             } else {
                 const index = seenCategories.indexOf(seenCategories.find((el)=>el.category == box.category));
-                seenCategories.splice(index, 1, {category:box.category, totalBoxes:seenCategories[index].totalBoxes+1, totalWeight:seenCategories[index].totalWeight+box.weight})
+                seenCategories.splice(index, 1, {category:box.category, name:box.name, totalBoxes:seenCategories[index].totalBoxes+1, totalWeight:seenCategories[index].totalWeight+box.weight})
             }
         })
         return seenCategories;

@@ -17,7 +17,7 @@ class Boxes {
                 maxPcsLgBox:100,
                 maxPcsMdBox:50,
                 maxPcsSmBox:25,
-                name:"Short Sleeve MESH"
+                name:"Short Sleeve Mesh"
             },
             {
                 category:"ls_mesh",
@@ -25,7 +25,7 @@ class Boxes {
                 maxPcsLgBox:80,
                 maxPcsMdBox:40,
                 maxPcsSmBox:20,
-                name:"Long Seeve MESH"
+                name:"Long Seeve Mesh"
             },
             {
                 category:"ss_hp",
@@ -73,7 +73,7 @@ class Boxes {
                 maxPcsLgBox:130,
                 maxPcsMdBox:60,
                 maxPcsSmBox:40,
-                name:"Tank Top MESH"
+                name:"Tank Top Mesh"
             },
         ];
         this.boxes = [
@@ -188,19 +188,19 @@ class Boxes {
                 if(this.largeBoxNum > 0) {
                     const largeBoxInfo = this.boxes.find(el=>el.type == "large");
                     for(let i=0; i<this.largeBoxNum; i++) {
-                        this.returnBoxesArray.push({category:category, boxType:"LrgPkg", weight:this.largeBoxWeightPerBox, dimensions:largeBoxInfo})
+                        this.returnBoxesArray.push({category:category, name:cat.name,  boxType:"LrgPkg", weight:this.largeBoxWeightPerBox, dimensions:largeBoxInfo})
                     }
                 }
                 if(this.mediumBoxNum > 0) {
                     const mediumBoxInfo = this.boxes.find(el=>el.type == "medium");
                     for(let i=0; i<this.mediumBoxNum; i++) {
-                        this.returnBoxesArray.push({category:category, boxType:"MedPkg", weight:this.mediumBoxWeightPerBox, dimensions:mediumBoxInfo})
+                        this.returnBoxesArray.push({category:category, name:cat.name, boxType:"MedPkg", weight:this.mediumBoxWeightPerBox, dimensions:mediumBoxInfo})
                     }
                 }
                 if(this.smallBoxNum > 0) {
                     const smallBoxInfo = this.boxes.find(el=>el.type == "small");
                     for(let i=0; i<this.smallBoxNum; i++) {
-                        this.returnBoxesArray.push({category:category, boxType:"SmPkg", weight:this.smallBoxWeightPerBox, dimensions:smallBoxInfo})
+                        this.returnBoxesArray.push({category:category, name:cat.name, boxType:"SmPkg", weight:this.smallBoxWeightPerBox, dimensions:smallBoxInfo})
                     }
                 }
             }
