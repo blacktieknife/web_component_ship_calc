@@ -59,7 +59,7 @@ class ShipCostCalc extends LitElement {
                 <div class="header_section" style="display:none;">
                     style:${this.selectedCategory} | totalPcs:${this.currentTotalPcs}
                 </div>
-                <div class="container-flex" style="flex-direction:column;"> 
+                <div class="container-flex" style="flex-direction:column;border:solid 1.2px #333; padding:5px;"> 
                 <div style="display:flex; align-items:center; justify-content:center; flex-direction:column;">
                     <div style="display:inline-block">
                             <calc-form 

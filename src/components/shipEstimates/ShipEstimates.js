@@ -27,41 +27,43 @@ class ShipEstimates extends LitElement {
     render(){
         this.parseBoxes();
         return html`
-        <div>Total Boxes:${this.boxes.length} | Total Weight:${this.smallBoxWeightTotal+this.mediumBoxWeightTotal+this.largeBoxWeightTotal}</div>
-        <div style="padding-top:5px;">
-        <div class="tiny-progessbar">
-            <div class="tiny-progessbarfill green" style="background-color:${this.boxes.length < 35 ? '#4CAF50' : this.boxes.length >= 35 && this.boxes.length < 45 ? '#daa520' : '#fa8072' }; width:${Math.floor((this.boxes.length/50)*100)}%">${Math.floor((this.boxes.length/50)*100)} %</div>
-        </div>
-        </div>
-        <div class="container-flex" style="flex-direction:column; flex-wrap:wrap;">
-            <div style="display:flex;flex-direction:row;margin-top:7px;flex-wrap:wrap;">
-                <span class="box_info_area">
-                    <div style="text-align:center;"><img src="./public/img/sm_box.png"></div>
-                    <div style="font-weight:bold;font-size:18px;text-align:center;">${this.smallBoxNum}</div>
-                    <div style="text-align:center;"><small>${this.smallBoxWeightPerBox}<small>lbs.<small> (Per Box)</small></small></small></div>
-                    <div style="text-align:center;"><small>${this.smallBoxWeightTotal}<small>lbs.</small> <small>(Total)</small></small></div>
-                </span>
-                <span class="box_info_area" style="margin-top:-8px;">
-                <div style="text-align:center;"><img src="./public/img/med_box.png"></div>
-                    <div style="font-weight:bold;font-size:18px;text-align:center;">${this.mediumBoxNum}</div>
-                    <div style="text-align:center;"><small>${this.mediumBoxWeightPerBox.l}<small>lbs.<small> (Per Box)</small></small></small></div>
-                    <div style="text-align:center;"><small>${this.mediumBoxWeightTotal}<small>lbs.</small> <small>(Total)</small></small></div>
-                </span>
-                <span class="box_info_area" style="margin-top:-10px;">
-                <div style="text-align:center;"><img src="./public/img/lrg_box.png"></div>
-                    <div style="font-weight:bold;font-size:18px;text-align:center;">${this.largeBoxNum}</div>
-                    <div style="text-align:center;"><small>${this.largeBoxWeightPerBox}<small>lbs.<small> (Per Box)</small></small></small></div>
-                    <div style="text-align:center;"><small>${this.largeBoxWeightTotal}<small>lbs.</small> <small>(Total)</small></small></div>
-                </span>
+        <div>
+            <div class="total_box_info">
+                Total Boxes: ${this.boxes.length} &nbsp;&nbsp; Total Weight: ${this.smallBoxWeightTotal+this.mediumBoxWeightTotal+this.largeBoxWeightTotal}
             </div>
-            <div style="padding:7px;">
-            <div>
-                ${this.boxes.length <= 50 ? html`
-                <label for="zip_input">Zip:</label>
-                <input id="zip_input" type="text" @input=${this.updateZip} .value=${this.zipCode} style="width:78px;"/>
-                <button ?disabled=${this.malformedZip} @click=${this.handleGetRates} class="btn btn-sm">Get Rates</button>` : html`
-                <span style="color:#e80000;font-weight:bolder;">! Too many packages <small>(50 Pkg. Limit)</small></span>`}
-            </div> 
+            <div class="tiny-progessbar">
+                <div class="tiny-progessbarfill green" style="background-color:${this.boxes.length < 35 ? '#4CAF50' : this.boxes.length >= 35 && this.boxes.length < 45 ? '#daa520' : '#fa8072' }; width:${Math.floor((this.boxes.length/50)*100)}%"></div>
+            </div>
+            <div class="container-flex" style="flex-direction:column; flex-wrap:wrap;">
+                <div style="display:flex;flex-direction:row;margin-top:7px;flex-wrap:wrap;justify-content:center;">
+                    <span class="box_info_area">
+                        <div style="text-align:center;"><img src="./public/img/sm_box.png"></div>
+                        <div style="font-weight:bold;font-size:18px;text-align:center;">${this.smallBoxNum}</div>
+                        <div style="text-align:center;"><small>${this.smallBoxWeightPerBox}<small>lbs.<small> (Per Box)</small></small></small></div>
+                        <div style="text-align:center;"><small>${this.smallBoxWeightTotal}<small>lbs.</small> <small>(Total)</small></small></div>
+                    </span>
+                    <span class="box_info_area" style="margin-top:-8px;">
+                    <div style="text-align:center;"><img src="./public/img/med_box.png"></div>
+                        <div style="font-weight:bold;font-size:18px;text-align:center;">${this.mediumBoxNum}</div>
+                        <div style="text-align:center;"><small>${this.mediumBoxWeightPerBox.l}<small>lbs.<small> (Per Box)</small></small></small></div>
+                        <div style="text-align:center;"><small>${this.mediumBoxWeightTotal}<small>lbs.</small> <small>(Total)</small></small></div>
+                    </span>
+                    <span class="box_info_area" style="margin-top:-10px;">
+                    <div style="text-align:center;"><img src="./public/img/lrg_box.png"></div>
+                        <div style="font-weight:bold;font-size:18px;text-align:center;">${this.largeBoxNum}</div>
+                        <div style="text-align:center;"><small>${this.largeBoxWeightPerBox}<small>lbs.<small> (Per Box)</small></small></small></div>
+                        <div style="text-align:center;"><small>${this.largeBoxWeightTotal < 1000 ? html`${this.largeBoxWeightTotal}<small>lbs.</small> <small>(Total)</small>` : html`${this.largeBoxWeightTotal}<small>lbs.</small>`}</small></div>
+                    </span>
+                </div>
+                <div style="padding:7px;display:flex;flex-direction:row;margin-top:7px;flex-wrap:wrap;justify-content:center;">
+                    <div>
+                        ${this.boxes.length <= 50 ? html`
+                        <label for="zip_input">Zip:</label>
+                        <input id="zip_input" type="text" @input=${this.updateZip} .value=${this.zipCode} style="width:78px;"/>
+                        <button ?disabled=${this.malformedZip} @click=${this.handleGetRates} class="btn btn-sm">Get Rates</button>` : html`
+                        <span style="color:#e80000;font-weight:bolder;">! Too many packages <small>(50 Pkg. Limit)</small></span>`}
+                    </div> 
+                </div>
             </div>
         </div>
         <style>

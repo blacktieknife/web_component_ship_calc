@@ -3,6 +3,7 @@ form {
     display:flex;
     flex-direction:row;
     flex-wrap:wrap;
+    justify-content:center;
 }
 label {
     cursor: pointer;
@@ -12,9 +13,9 @@ label {
 }
 input {
     max-width:85px;
-    padding:7px;
+    padding:5px;
     margin-right:10px;
-    font-size:18px;
+    font-size:15px;
     font-weight:bold;
     border-radius:4px;
     background-color:#CAF7CA;
@@ -26,9 +27,9 @@ input([disabled]) {
 }
 
 select {
-    padding:9px;
+    padding:5px;
     border-radius:4px;
-    font-size:16px;
+    font-size:14px;
 }
 .btn-primary {
     color: #fff;

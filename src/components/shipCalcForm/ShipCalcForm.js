@@ -21,7 +21,7 @@ class ShipCalcForm extends LitElement {
             <form @submit=${(e)=>{e.preventDefault();}}>
                 <div>
                     <label for="pcs_num_input">Total Pcs.</label>
-                    <input type="number" id="pcs_num_input" @input=${this.handleTotalPcsChange} .value=${this.totalPcs}>
+                    <input type="number" maxlength=5 max=50000 min=0 id="pcs_num_input" @input=${this.handleTotalPcsChange} .value=${this.totalPcs}>
                 </div>
                 <div>
                     <label for="cat_input">Category</label>
@@ -52,9 +52,14 @@ class ShipCalcForm extends LitElement {
         
     }
     handleTotalPcsChange(e){
-        this.totalPcs = e.target.value;
-        this.dispatchEvent(new CustomEvent("currentTotalPcs", {detail:this.totalPcs || 0}));
-        this.setEstimates();  
+        if (Number(e.target.value) <= 50000) {
+            this.totalPcs = Number(e.target.value);
+            this.dispatchEvent(new CustomEvent("currentTotalPcs", {detail:this.totalPcs || 0}));
+            this.setEstimates();  
+        }  else {
+            e.target.value = 50000
+            this.totalPcs = 50000;
+        }
     }
     handleAddCategory(){
         const newSavedCategories = [...this.savedCategories, this.category];

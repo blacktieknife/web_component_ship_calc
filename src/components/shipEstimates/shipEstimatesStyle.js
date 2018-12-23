@@ -16,6 +16,19 @@ const shipEstimateStyle = `
   cursor: pointer;
 }
 
+.total_box_info {
+    text-transform:uppercase;
+    font-size:11px;
+    font-weight:bold;
+    letter-spacing:.8px;
+    margin-top:5px;
+    padding:5px;
+    text-align:center;
+    font-family:arial;
+    color:white;
+    background-color:#7692E9;
+}
+
 .tiny-progessbar{
     height:10px;
     width:100%;
@@ -26,14 +39,14 @@ const shipEstimateStyle = `
     font-size:9px;
     text-align:center;
     color:white;
-    max-width:280px;
+    max-width:100%;
     font-weight:bold;
     height:10px;
 }
 
 .box_info_area {
-    width:85px;
- padding:8px;
+    width:75px;
+    padding:8px;
 }
 
 .btn {
