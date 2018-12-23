@@ -1,8 +1,6 @@
 const shipEstimateStyle = `
     .container-flex{
         display:flex;
-        align-content:center;
-        justify-content:center;
     }
     input {
         border-radius:6px;
@@ -16,6 +14,26 @@ const shipEstimateStyle = `
   line-height: 1.5;
   border-radius: 3px;
   cursor: pointer;
+}
+
+.tiny-progessbar{
+    height:10px;
+    width:280px;
+    background-color:silver;
+}
+
+.tiny-progessbarfill{
+    font-size:9px;
+    text-align:center;
+    color:white;
+    max-width:280px;
+    font-weight:bold;
+    height:10px;
+}
+
+.box_info_area {
+    width:85px;
+ padding:8px;
 }
 
 .btn {

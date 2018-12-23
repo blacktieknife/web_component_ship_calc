@@ -6,7 +6,8 @@ class ShipCalcForm extends LitElement {
         return {
           category: {type:String},
           totalPcs:{type:Number},
-          currentSavedCategories:{type:Array}
+          currentSavedCategories:{type:Array},
+          savedBoxesLength:{type:Number}
         }
     }
     constructor(){
@@ -17,14 +18,13 @@ class ShipCalcForm extends LitElement {
     }
     render(){
         return html`
-            <h3>Calculate UPS rates</h3>
             <form @submit=${(e)=>{e.preventDefault()}}>
                 <div>
                     <label for="pcs_num_input">Total Pcs.</label>
                     <input type="number" id="pcs_num_input" @input=${this.handleTotalPcsChange} .value=${this.totalPcs}>
                 </div>
                 <div>
-                    <label for="cat_input">Select Category</label>
+                    <label for="cat_input">Category</label>
                     <select id="cat_input" @change=${this.handleCategoryChange} .value=${this.category}>
                         <option value="">Select Category</option>
                         ${this.boxes.categories.map((style)=>{
@@ -33,7 +33,7 @@ class ShipCalcForm extends LitElement {
                             `;
                         })}
                     </select>
-                    <button title="Add multiple categories to shipment" type="button" ?disabled=${this.category == '' || this.category == null || this.totalPcs < 1} class="btn btn-primary btn-sm" id="add_cat_btn" @click=${this.handleAddCategory} style="border:none;border-radius:50%;font-weight:bold;font-size:14px;padding:2px;min-width:22px;">&nbsp;+&nbsp;</button>
+                    <button title="Add multiple categories to shipment" type="button" ?disabled=${this.category == '' || this.category == null || this.totalPcs < 1 || this.savedBoxesLength > 50} class="btn btn-primary btn-sm" id="add_cat_btn" @click=${this.handleAddCategory} style="border:none;border-radius:50%;font-weight:bold;font-size:14px;padding:2px;min-width:22px;">&nbsp;+&nbsp;</button>
                 </div>
             </form>
             <style>
@@ -42,7 +42,6 @@ class ShipCalcForm extends LitElement {
             `;
     }
     handleCategoryChange(e){
-        console.log(e.target.value.trim())
         if(e.target.value.trim() == '') {
             this.category = '';
         } else {

@@ -1,21 +1,22 @@
 const savedBoxesStyle = `
 .container-flex{
     display:flex;
-    align-content:center;
-    justify-content:center;
 }
 .saved_box_badge{
     display:flex;
     align-items:center;
     justify-content:center;
     text-align:center;
-    font-size:9px;
+    font-size:11px;
     font-weight:bold;
     background-color:#1C2D3F;
     color:white;
-    width:45px;
-    height:45px;
+    cursor:pointer;
+    width:30px;
+    height:30px;
     border-radius:50%;
+    margin-right:7px;
+    z-index:599;
 }
 `;
 

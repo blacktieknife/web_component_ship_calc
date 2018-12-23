@@ -3,6 +3,7 @@ import './components/shipCalcForm/ShipCalcForm.js';
 import './components/shipEstimates/ShipEstimates.js';
 import './components/savedBoxes/SavedBoxes.js';
 import appStyle from './appStyle.js';
+import loaderCss from './helpers/loaderCss.js';
 import ups from './helpers/upsHelper.js';
 import {repeat} from "../dependencies/lit/directives/repeat.js";
 import {until} from "../dependencies/lit/directives/until.js";
@@ -14,7 +15,8 @@ class ShipCostCalc extends LitElement {
           currentTotalPcs:{type:Number},
           currentBoxes:{type:Array},
           rates:{type:Array},
-          isLoading:{type:Boolean}
+          isLoading:{type:Boolean},
+          saved:{type:Array}
           //currentSavedCategories:{type:Array}
         }
     }
@@ -45,14 +47,23 @@ class ShipCostCalc extends LitElement {
                 ${appStyle}
             </style>
             <div class="container">
-             ${this.isLoading ? html`<div class="isLoading">Is loadinged</div>`:null}
-                <div class="header_section">
-                style:${this.selectedCategory} | totalPcs:${this.currentTotalPcs}
+             ${this.isLoading ? html`
+                <style>
+                    ${loaderCss}
+                </style>
+                <div class="isLoading">
+                <div>Fetching Rates</div>
+                    <div class="loader"><div></div><div></div><div></div><div></div></div>
                 </div>
-                <div class="container-flex">
-                    <div style="display:inline-flex">
+             `:null}
+                <div class="header_section" style="display:none;">
+                    style:${this.selectedCategory} | totalPcs:${this.currentTotalPcs}
+                </div>
+                <div class="container-flex" style="flex-direction:column;"> 
+                    <div style="display:inline-block">
                         <calc-form 
                             .savedCategories=${this.currentSavedCategories}
+                            .savedBoxesLength=${this.currentBoxes.concat(this.saved).length}
                             @categorySelected=${this.handleSelectedCategory} 
                             @currentTotalPcs=${this.handleCurrentTotal}
                             @updateBoxesArray=${this.handleUpdateBoxes}
@@ -61,7 +72,7 @@ class ShipCostCalc extends LitElement {
                             >
                         </calc-form>
                     </div>
-                    <div style="display:inline-flex">
+                    <div style="display:inline-block">
                         ${this.currentBoxes.length > 0 || this.saved.length > 0 ? html`
                         <ship-estimates
                             .boxes=${this.currentBoxes.concat(this.saved)} 
@@ -71,13 +82,16 @@ class ShipCostCalc extends LitElement {
                             >     
                         </ship-estimates>` : ""}
                     </div>
+                    <div style="display:inline-block">
+                        ${this.saved.length > 0 ? 
+                            html`<saved-boxes 
+                                .saved=${this.saved}
+                                @removeFromSaved=${this.handleRemoveFromSaved}
+                            >
+                            </saved-boxes>
+                            `: null }
+                    </div>
                 </div>
-                ${this.saved.length > 0 ? 
-                    html`<saved-boxes 
-                        .saved=${this.saved}
-                    >
-                    </saved-boxes>
-                `: null }
             </div>
             `;
         }
@@ -119,7 +133,7 @@ class ShipCostCalc extends LitElement {
             this.isLoading = false;
         })
     }
-    handleReset(){
+    handleReset() {
         this.currentBoxes = [];
         this.saved = [];
         this.rates = [];
@@ -127,6 +141,10 @@ class ShipCostCalc extends LitElement {
         this.selectedCategory = null;
         this.currentTotalPcs = 0;
         this.isLoading = false;
+    }
+    handleRemoveFromSaved(e) {
+        this.saved = this.saved.filter(box=>box.category !== e.detail);
+        this.currentSavedCategories = this.currentSavedCategories.filter(cat=>cat !== e.detail);
     }
 }
 

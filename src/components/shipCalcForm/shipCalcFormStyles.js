@@ -1,9 +1,7 @@
 const styles = `
 form {
     display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
+    flex-direction:row;
 }
 label {
     cursor: pointer;
@@ -14,16 +12,23 @@ label {
 input {
     min-width:55px;
     max-width:85px;
-    padding:10px;
-    font-size:22px;
+    padding:8px;
+    margin-right:10px;
+    font-size:18px;
     font-weight:bold;
     border-radius:4px;
     background-color:#CAF7CA;
 }
+
+input([disabled]) {
+    background-color:#F5F5F5 !important;
+    color:#808080 !important;
+}
+
 select {
-    padding:10px;
+    padding:9px;
     border-radius:4px;
-    font-size:18px;
+    font-size:16px;
 }
 .btn-primary {
     color: #fff;
