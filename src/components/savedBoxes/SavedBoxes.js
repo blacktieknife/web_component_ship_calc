@@ -18,6 +18,7 @@ class SavedBoxes extends LitElement {
     }
     render(){
         return html`
+                ${console.log("display render overlay")}
                 ${this.displayOverlay ? this.showOverLay() : null}
                 <div class="container-flex" style="flex-direction:row;flex-wrap:wrap;">
                     ${this.reduceSaved().map(category=>{
@@ -63,8 +64,10 @@ class SavedBoxes extends LitElement {
         
     }
     showOverLay(e) {
+        console.log("show overlay fire");
+        console.log(this.displayOverlay)
         return html`
-            <div style="border-radius:8px;text-align:center;width:150px;height:75px;position:absolute;top:${(this.y-79)+'px'};left:${(this.x)+"px"};font-weight:bold;background-color:#333;color:white;z-index:555;">
+            <div style="border-radius:8px;text-align:center;width:150px;height:75px;position:absolute;top:3px;left:5px;font-weight:bold;background-color:#333;color:white;z-index:5555;">
                 ${this.overLayText}
             </div>
         `;
@@ -84,22 +87,13 @@ class SavedBoxes extends LitElement {
         `;
     }
     updateMousePos(e) {
-        const elOffset = this.getOffset(e.currentTarget);
         this.displayOverlay = true;
-        this.x = elOffset.left;
-        this.y = elOffset.top;
         this.updateOverText(e.target.id);
     }
     hideOverLay(e) {
         this.displayOverlay = false;
     }
-    getOffset(el) {
-        const rect = el.getBoundingClientRect();
-        return {
-          left: rect.left + window.scrollX,
-          top: rect.top + window.scrollY
-        };
-    }
+    
 }
 
 customElements.define("saved-boxes", SavedBoxes);

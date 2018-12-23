@@ -36,7 +36,7 @@ class ShipCostCalc extends LitElement {
             <style>
                 ${appStyle}
             </style>
-            <div class="container">
+            <div>
                 <h1>Rates Component here.</h1>
                 <button @click=${this.handleReset}>reset</button>
             </div>
@@ -46,7 +46,7 @@ class ShipCostCalc extends LitElement {
             <style>
                 ${appStyle}
             </style>
-            <div class="container">
+            
              ${this.isLoading ? html`
                 <style>
                     ${loaderCss}
@@ -60,39 +60,40 @@ class ShipCostCalc extends LitElement {
                     style:${this.selectedCategory} | totalPcs:${this.currentTotalPcs}
                 </div>
                 <div class="container-flex" style="flex-direction:column;"> 
+                <div style="display:flex; align-items:center; justify-content:center; flex-direction:column;">
                     <div style="display:inline-block">
-                        <calc-form 
-                            .savedCategories=${this.currentSavedCategories}
-                            .savedBoxesLength=${this.currentBoxes.concat(this.saved).length}
-                            @categorySelected=${this.handleSelectedCategory} 
-                            @currentTotalPcs=${this.handleCurrentTotal}
-                            @updateBoxesArray=${this.handleUpdateBoxes}
-                            @clearBoxesArray=${this.handleClearBoxes}
-                            @addCategory=${this.handleAddCategory}
-                            >
-                        </calc-form>
-                    </div>
-                    <div style="display:inline-block">
-                        ${this.currentBoxes.length > 0 || this.saved.length > 0 ? html`
-                        <ship-estimates
-                            .boxes=${this.currentBoxes.concat(this.saved)} 
-                            .totalPcs=${this.currentTotalPcs} 
-                            .selectedCat=${this.selectedCategory}
-                            @getRates=${this.handleGetRates}
-                            >     
-                        </ship-estimates>` : ""}
-                    </div>
-                    <div style="display:inline-block">
-                        ${this.saved.length > 0 ? 
-                            html`<saved-boxes 
-                                .saved=${this.saved}
-                                @removeFromSaved=${this.handleRemoveFromSaved}
-                            >
-                            </saved-boxes>
-                            `: null }
+                            <calc-form 
+                                .savedCategories=${this.currentSavedCategories}
+                                .savedBoxesLength=${this.currentBoxes.concat(this.saved).length}
+                                @categorySelected=${this.handleSelectedCategory} 
+                                @currentTotalPcs=${this.handleCurrentTotal}
+                                @updateBoxesArray=${this.handleUpdateBoxes}
+                                @clearBoxesArray=${this.handleClearBoxes}
+                                @addCategory=${this.handleAddCategory}
+                                >
+                            </calc-form>
+                        </div>
+                        <div style="display:inline-block">
+                            ${this.currentBoxes.length > 0 || this.saved.length > 0 ? html`
+                            <ship-estimates
+                                .boxes=${this.currentBoxes.concat(this.saved)} 
+                                .totalPcs=${this.currentTotalPcs} 
+                                .selectedCat=${this.selectedCategory}
+                                @getRates=${this.handleGetRates}
+                                >     
+                            </ship-estimates>` : ""}
+                        </div>
+                        <div style="display:inline-block">
+                            ${this.saved.length > 0 ? 
+                                html`<saved-boxes 
+                                    .saved=${this.saved}
+                                    @removeFromSaved=${this.handleRemoveFromSaved}
+                                >
+                                </saved-boxes>
+                                `: null }
+                        </div>
                     </div>
                 </div>
-            </div>
             `;
         }
     }

@@ -2,6 +2,7 @@ const styles = `
 form {
     display:flex;
     flex-direction:row;
+    flex-wrap:wrap;
 }
 label {
     cursor: pointer;
@@ -10,9 +11,8 @@ label {
     font-size:14px;
 }
 input {
-    min-width:55px;
     max-width:85px;
-    padding:8px;
+    padding:7px;
     margin-right:10px;
     font-size:18px;
     font-weight:bold;

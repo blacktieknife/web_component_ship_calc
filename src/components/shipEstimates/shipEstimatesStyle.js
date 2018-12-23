@@ -18,7 +18,7 @@ const shipEstimateStyle = `
 
 .tiny-progessbar{
     height:10px;
-    width:280px;
+    width:100%;
     background-color:silver;
 }
 

@@ -28,13 +28,13 @@ class ShipEstimates extends LitElement {
         this.parseBoxes();
         return html`
         <div>Total Boxes:${this.boxes.length} | Total Weight:${this.smallBoxWeightTotal+this.mediumBoxWeightTotal+this.largeBoxWeightTotal}</div>
-        <div style="padding-left:5px; padding-top:5px;">
+        <div style="padding-top:5px;">
         <div class="tiny-progessbar">
             <div class="tiny-progessbarfill green" style="background-color:${this.boxes.length < 35 ? '#4CAF50' : this.boxes.length >= 35 && this.boxes.length < 45 ? '#daa520' : '#fa8072' }; width:${Math.floor((this.boxes.length/50)*100)}%">${Math.floor((this.boxes.length/50)*100)} %</div>
         </div>
         </div>
-        <div class="container-flex" style="flex-direction:column;">
-            <div style="display:flex;flex-direction:row;margin-top:7px;">
+        <div class="container-flex" style="flex-direction:column; flex-wrap:wrap;">
+            <div style="display:flex;flex-direction:row;margin-top:7px;flex-wrap:wrap;">
                 <span class="box_info_area">
                     <div style="text-align:center;"><img src="./public/img/sm_box.png"></div>
                     <div style="font-weight:bold;font-size:18px;text-align:center;">${this.smallBoxNum}</div>

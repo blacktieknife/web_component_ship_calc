@@ -18,7 +18,7 @@ class ShipCalcForm extends LitElement {
     }
     render(){
         return html`
-            <form @submit=${(e)=>{e.preventDefault()}}>
+            <form @submit=${(e)=>{e.preventDefault();}}>
                 <div>
                     <label for="pcs_num_input">Total Pcs.</label>
                     <input type="number" id="pcs_num_input" @input=${this.handleTotalPcsChange} .value=${this.totalPcs}>
