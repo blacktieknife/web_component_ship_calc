@@ -29,13 +29,13 @@ class ShipEstimates extends LitElement {
         return html`
         <div>
             <div class="total_box_info">
-                Total Boxes: ${this.boxes.length} &nbsp;&nbsp; Total Weight: ${this.smallBoxWeightTotal+this.mediumBoxWeightTotal+this.largeBoxWeightTotal}
+                Boxes:&nbsp;${this.boxes.length}&nbsp; &nbsp;Weight:&nbsp;${this.smallBoxWeightTotal+this.mediumBoxWeightTotal+this.largeBoxWeightTotal}<small><small>&nbsp;(lbs)</small></small>
             </div>
             <div class="tiny-progessbar">
-                <div class="tiny-progessbarfill green" style="background-color:${this.boxes.length < 35 ? '#4CAF50' : this.boxes.length >= 35 && this.boxes.length < 45 ? '#daa520' : '#fa8072' }; width:${Math.floor((this.boxes.length/50)*100)}%"></div>
+                <div class="tiny-progessbarfill green" style="background-color:${this.boxes.length < 35 ? '#4CAF50' : this.boxes.length >= 35 && this.boxes.length < 45 ? '#daa520' : '#fa8072' }; width:${Math.floor((this.boxes.length/50)*100)}%">${this.boxes.length}/50</div>
             </div>
             <div class="container-flex" style="flex-direction:column; flex-wrap:wrap;">
-                <div style="display:flex;flex-direction:row;margin-top:7px;flex-wrap:wrap;justify-content:center;">
+                <div style="display:flex;flex-direction:row;margin-top:7px;flex-wrap:wrap;justify-content:space-around;">
                     <span class="box_info_area">
                         <div style="text-align:center;"><img src="./public/img/sm_box.png"></div>
                         <div style="font-weight:bold;font-size:18px;text-align:center;">${this.smallBoxNum}</div>
@@ -59,9 +59,9 @@ class ShipEstimates extends LitElement {
                     <div>
                         ${this.boxes.length <= 50 ? html`
                         <label for="zip_input">Zip:</label>
-                        <input id="zip_input" type="text" @input=${this.updateZip} .value=${this.zipCode} style="width:78px;"/>
+                        <input id="zip_input" type="text" @input=${this.updateZip} .value=${this.zipCode} style="width:78px;border:solid 1.2px rgb(169, 169, 169);"/>
                         <button ?disabled=${this.malformedZip} @click=${this.handleGetRates} class="btn btn-sm">Get Rates</button>` : html`
-                        <span style="color:#e80000;font-weight:bolder;">! Too many packages <small>(50 Pkg. Limit)</small></span>`}
+                        <span style="color:#e80000;font-weight:bolder;">Too many boxes <small>(50 box limit)</small></span>`}
                     </div> 
                 </div>
             </div>

@@ -3,7 +3,8 @@ form {
     display:flex;
     flex-direction:row;
     flex-wrap:wrap;
-    justify-content:center;
+    justify-content:space-around;
+    width:100%;
 }
 label {
     cursor: pointer;
@@ -12,24 +13,24 @@ label {
     font-size:14px;
 }
 input {
-    max-width:85px;
-    padding:5px;
-    margin-right:10px;
-    font-size:15px;
+    border:solid 1.2px rgb(169, 169, 169);
+    padding:4px;
+    margin-right:5px;
     font-weight:bold;
     border-radius:4px;
     background-color:#CAF7CA;
+    box-shadow:none;
 }
 
 input([disabled]) {
     background-color:#F5F5F5 !important;
     color:#808080 !important;
 }
-
 select {
-    padding:5px;
+    padding:3px;
+    font-weight:bold;
     border-radius:4px;
-    font-size:14px;
+
 }
 .btn-primary {
     color: #fff;

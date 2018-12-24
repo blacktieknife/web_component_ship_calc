@@ -1,7 +1,10 @@
 import {LitElement, html} from '../dependencies/lit-element/lit-element.js';
+
 import './components/shipCalcForm/ShipCalcForm.js';
 import './components/shipEstimates/ShipEstimates.js';
 import './components/savedBoxes/SavedBoxes.js';
+import './components/shipRates/ShipRates.js';
+
 import appStyle from './appStyle.js';
 import loaderCss from './helpers/loaderCss.js';
 import ups from './helpers/upsHelper.js';
@@ -37,8 +40,11 @@ class ShipCostCalc extends LitElement {
                 ${appStyle}
             </style>
             <div>
-                <h1>Rates Component here.</h1>
-                <button @click=${this.handleReset}>reset</button>
+                <ship-rates 
+                    .rates="${this.rates}"
+                    @resetShipCalc="${this.handleReset}"
+                >
+                </ship-rates>
             </div>
             `;
         } else {
@@ -59,9 +65,9 @@ class ShipCostCalc extends LitElement {
                 <div class="header_section" style="display:none;">
                     style:${this.selectedCategory} | totalPcs:${this.currentTotalPcs}
                 </div>
-                <div class="container-flex" style="flex-direction:column;border:solid 1.2px #333; padding:5px;"> 
-                <div style="display:flex; align-items:center; justify-content:center; flex-direction:column;">
-                    <div style="display:inline-block">
+                <div class="container-flex" style="flex-direction:column;padding:5px;"> 
+                <div style="display:flex; align-items:center; flex-direction:column;">
+                    <div style="display:inline-block;width:100%">
                             <calc-form 
                                 .savedCategories=${this.currentSavedCategories}
                                 .savedBoxesLength=${this.currentBoxes.concat(this.saved).length}
@@ -73,7 +79,7 @@ class ShipCostCalc extends LitElement {
                                 >
                             </calc-form>
                         </div>
-                        <div style="display:inline-block">
+                        <div style="display:inline-block;width:100%">
                             ${this.currentBoxes.length > 0 || this.saved.length > 0 ? html`
                             <ship-estimates
                                 .boxes=${this.currentBoxes.concat(this.saved)} 
@@ -81,7 +87,20 @@ class ShipCostCalc extends LitElement {
                                 .selectedCat=${this.selectedCategory}
                                 @getRates=${this.handleGetRates}
                                 >     
-                            </ship-estimates>` : ""}
+                            </ship-estimates>` : html`
+                                <div style="text-align:center;width:100%;min-height:193.5px;margin-top:15px;display:flex;align-items:center;flex-direction:column;font-size:22px;">
+                                    <h4 style="margin-top:5px;margin-bottom:5px;">Shipping Rate Calculator</h4>
+                                    <small>
+                                        <div style="margin:10px 0px;padding:5px;background-color:lightblue;border-radius:4px;">
+                                            To get started, pick a category & enter the total number pieces of that category you are shipping
+                                        </div>
+                                        <div style="background-color:lightgreen;border-radius:3px;padding:5px;">
+                                            <small>
+                                                <small style="padding:10px 0px;">Note: you can add multiple categories to your shipment</small>
+                                            </small>
+                                        </div>
+                                    </small>
+                                </div>`}
                         </div>
                         <div style="display:inline-block">
                             ${this.saved.length > 0 ? 

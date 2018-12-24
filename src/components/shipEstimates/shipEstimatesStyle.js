@@ -21,17 +21,21 @@ const shipEstimateStyle = `
     font-size:11px;
     font-weight:bold;
     letter-spacing:.8px;
-    margin-top:5px;
+    margin-top:7px;
     padding:5px;
     text-align:center;
     font-family:arial;
-    color:white;
-    background-color:#7692E9;
+    color:#333;
+    border-top-left-radius:3px;
+    border-top-right-radius:3px;
+    background-color:#CFDBFF;
 }
 
 .tiny-progessbar{
     height:10px;
     width:100%;
+    border-bottom-left-radius:3px;
+    border-bottom-right-radius:3px;
     background-color:silver;
 }
 
@@ -42,11 +46,13 @@ const shipEstimateStyle = `
     max-width:100%;
     font-weight:bold;
     height:10px;
+    border-bottom-left-radius:3px;
+    border-bottom-right-radius:3px;
 }
 
 .box_info_area {
     width:75px;
-    padding:8px;
+    padding-top:8px;
 }
 
 .btn {
