@@ -1,6 +1,6 @@
 import {LitElement, html} from '../../../dependencies/lit-element/lit-element.js';
 import Boxes from '../../helpers/Boxes.js';
-import shipCalcFormStyle from './shipCalcFormStyles';
+import shipCalcFormStyle from './shipCalcFormStyles.js';
 class ShipCalcForm extends LitElement {
     static get properties() {
         return {
