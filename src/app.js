@@ -4,6 +4,7 @@ import './components/shipCalcForm/ShipCalcForm.js';
 import './components/shipEstimates/ShipEstimates.js';
 import './components/savedBoxes/SavedBoxes.js';
 import './components/shipRates/ShipRates.js';
+import './components/RipInput.js';
 
 import appStyle from './appStyle.js';
 import loaderCss from './helpers/loaderCss.js';
@@ -113,6 +114,7 @@ class ShipCostCalc extends LitElement {
                         </div>
                     </div>
                 </div>
+                
             `;
         }
     }

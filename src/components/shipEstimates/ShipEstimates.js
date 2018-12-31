@@ -1,5 +1,6 @@
 import {LitElement, html} from '../../../dependencies/lit-element/lit-element.js';
 import shipEstimatesStyle from './shipEstimatesStyle.js';
+import '../RipInput.js';
 class ShipEstimates extends LitElement {
     static get properties() {
         return {
@@ -58,10 +59,12 @@ class ShipEstimates extends LitElement {
                 <div style="padding:7px;display:flex;flex-direction:row;margin-top:7px;flex-wrap:wrap;justify-content:center;">
                     <div>
                         ${this.boxes.length <= 50 ? html`
-                        <label for="zip_input">Zip:</label>
-                        <input id="zip_input" type="text" @input=${this.updateZip} .value=${this.zipCode} style="width:78px;border:solid 1.2px rgb(169, 169, 169);"/>
-                        <button ?disabled=${this.malformedZip} @click=${this.handleGetRates} class="btn btn-sm">Get Rates</button>` : html`
-                        <span style="color:#e80000;font-weight:bolder;">Too many boxes <small>(50 box limit)</small></span>`}
+                        <div style="max-width:200px; text-align:center;">
+                            <rip-input label="Zip Code" style="text-align:left;" @input=${this.updateZip} .value=${this.zipCode}></rip-input>
+                            <div style="padding:8px;"></div>
+                            <button ?disabled=${this.malformedZip} @click=${this.handleGetRates} class="btn btn-sm">Get Rates</button>` : html`
+                            <span style="color:#e80000;font-weight:bolder;">Too many boxes <small>(50 box limit)</small></span>`}
+                        </div>  
                     </div> 
                 </div>
             </div>
