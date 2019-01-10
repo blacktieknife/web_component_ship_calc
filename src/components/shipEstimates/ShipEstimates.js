@@ -113,7 +113,6 @@ class ShipEstimates extends LitElement {
     }
     handleGetRates(){
         if(!this.malformedZip) {
-            console.log("do stuff with this.boxes && other things",this.zipCode);
             this.dispatchEvent(new CustomEvent("getRates", {detail:this.boxes}))
         } else {
             alert("Malformed zip code.");

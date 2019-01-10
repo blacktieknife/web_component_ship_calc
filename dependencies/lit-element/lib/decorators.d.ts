@@ -78,3 +78,4 @@ export declare const queryAll: (selector: string) => (proto: any, propName: stri
  *     }
  */
 export declare const eventOptions: (options: AddEventListenerOptions) => (proto: any, name: string) => void;
+//# sourceMappingURL=decorators.d.ts.map

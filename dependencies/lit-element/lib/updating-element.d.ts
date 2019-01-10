@@ -107,49 +107,68 @@ export declare const notEqual: HasChanged;
  */
 export declare abstract class UpdatingElement extends HTMLElement {
     /**
-     * Maps attribute names to properties; for example `foobar` attribute
-     * to `fooBar` property.
+     * Maps attribute names to properties; for example `foobar` attribute to
+     * `fooBar` property. Created lazily on user subclasses when finalizing the
+     * class.
      */
     private static _attributeToPropertyMap;
     /**
      * Marks class as having finished creating properties.
      */
-    private static _finalized;
+    protected static finalized: boolean;
     /**
      * Memoized list of all class properties, including any superclass properties.
+     * Created lazily on user subclasses when finalizing the class.
      */
-    private static _classProperties;
+    private static _classProperties?;
+    /**
+     * User-supplied object that maps property names to `PropertyDeclaration`
+     * objects containing options for configuring the property.
+     */
     static properties: PropertyDeclarations;
     /**
      * Returns a list of attributes corresponding to the registered properties.
+     * @nocollapse
      */
     static readonly observedAttributes: string[];
+    /**
+     * Ensures the private `_classProperties` property metadata is created.
+     * In addition to `_finalize` this is also called in `createProperty` to
+     * ensure the `@property` decorator can add property metadata.
+     */
+    /** @nocollapse */
+    private static _ensureClassProperties;
     /**
      * Creates a property accessor on the element prototype if one does not exist.
      * The property setter calls the property's `hasChanged` property option
      * or uses a strict identity check to determine whether or not to request
      * an update.
+     * @nocollapse
      */
     static createProperty(name: PropertyKey, options?: PropertyDeclaration): void;
     /**
      * Creates property accessors for registered properties and ensures
      * any superclasses are also finalized.
+     * @nocollapse
      */
     private static _finalize;
     /**
      * Returns the property name for the given attribute `name`.
+     * @nocollapse
      */
     private static _attributeNameForProperty;
     /**
      * Returns true if a property should request an update.
      * Called when a property value is set and uses the `hasChanged`
      * option for the property if present or a strict identity check.
+     * @nocollapse
      */
     private static _valueHasChanged;
     /**
      * Returns the property value for the given attribute value.
      * Called via the `attributeChangedCallback` and uses the property's
      * `converter` or `converter.fromAttribute` property option.
+     * @nocollapse
      */
     private static _propertyValueFromAttribute;
     /**
@@ -158,6 +177,7 @@ export declare abstract class UpdatingElement extends HTMLElement {
      * If this returns null, the attribute will be removed, otherwise the
      * attribute will be set to the value.
      * This uses the property's `reflect` and `type.toAttribute` property options.
+     * @nocollapse
      */
     private static _propertyValueToAttribute;
     private _updateState;
@@ -173,15 +193,9 @@ export declare abstract class UpdatingElement extends HTMLElement {
      * Map with keys of properties that should be reflected when updated.
      */
     private _reflectingProperties;
-    /**
-     * Node or ShadowRoot into which element DOM should be rendered. Defaults
-     * to an open shadowRoot.
-     */
-    protected renderRoot?: Element | DocumentFragment;
     constructor();
     /**
-     * Performs element initialization. By default this calls `createRenderRoot`
-     * to create the element `renderRoot` node and captures any pre-set values for
+     * Performs element initialization. By default captures any pre-set values for
      * registered properties.
      */
     protected initialize(): void;
@@ -202,17 +216,6 @@ export declare abstract class UpdatingElement extends HTMLElement {
      * Applies previously saved instance properties.
      */
     private _applyInstanceProperties;
-    /**
-     * Returns the node into which the element should render and by default
-     * creates and returns an open shadowRoot. Implement to customize where the
-     * element's DOM is rendered. For example, to render into the element's
-     * childNodes, return `this`.
-     * @returns {Element|DocumentFragment} Returns a node into which to render.
-     */
-    protected createRenderRoot(): Element | ShadowRoot;
-    /**
-     * Uses ShadyCSS to keep element DOM updated.
-     */
     connectedCallback(): void;
     /**
      * Allows for `super.disconnectedCallback()` in extensions while
@@ -246,6 +249,7 @@ export declare abstract class UpdatingElement extends HTMLElement {
     private _enqueueUpdate;
     private readonly _hasConnected;
     private readonly _hasRequestedUpdate;
+    protected readonly hasUpdated: number;
     /**
      * Performs an element update.
      *
@@ -254,7 +258,7 @@ export declare abstract class UpdatingElement extends HTMLElement {
      *
      * ```
      * protected async performUpdate(): Promise<unknown> {
-     *   await new Promise((resolve) => requestAnimationFrame(() => resolve());
+     *   await new Promise((resolve) => requestAnimationFrame(() => resolve()));
      *   super.performUpdate();
      * }
      * ```
@@ -284,8 +288,8 @@ export declare abstract class UpdatingElement extends HTMLElement {
     protected shouldUpdate(_changedProperties: PropertyValues): boolean;
     /**
      * Updates the element. This method reflects property values to attributes.
-     * It can be overridden to render and keep updated DOM in the element's
-     * `renderRoot`. Setting properties inside this method will *not* trigger
+     * It can be overridden to render and keep updated element DOM.
+     * Setting properties inside this method will *not* trigger
      * another update.
      *
      * * @param _changedProperties Map of changed properties with old values
@@ -313,3 +317,4 @@ export declare abstract class UpdatingElement extends HTMLElement {
     protected firstUpdated(_changedProperties: PropertyValues): void;
 }
 export {};
+//# sourceMappingURL=updating-element.d.ts.map

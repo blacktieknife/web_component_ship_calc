@@ -12,6 +12,9 @@
  * http://polymer.github.io/PATENTS.txt
  */
 /**
+ * @module lit-html
+ */
+/**
  * The Part interface represents a dynamic part of a template instance rendered
  * by lit-html.
  */
@@ -32,4 +35,8 @@ export interface Part {
  * should not be written to the DOM.
  */
 export declare const noChange: {};
+/**
+ * A sentinel value that signals a NodePart to fully clear its content.
+ */
+export declare const nothing: {};
 //# sourceMappingURL=part.d.ts.map

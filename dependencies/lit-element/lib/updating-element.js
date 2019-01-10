@@ -12,6 +12,13 @@
  * http://polymer.github.io/PATENTS.txt
  */
 /**
+ * When using Closure Compiler, JSCompiler_renameProperty(property, object) is
+ * replaced at compile time by the munged name for object[property]. We cannot
+ * alias this function, so we have to use a small shim that has the same
+ * behavior when not compiling.
+ */
+const JSCompiler_renameProperty = (prop, _obj) => prop;
+/**
  * Returns the property descriptor for a property on this prototype by walking
  * up the prototype chain. Note that we stop just before Object.prototype, which
  * also avoids issues with Symbol polyfills (core-js, get-own-property-symbols),
@@ -69,7 +76,7 @@ const defaultPropertyDeclaration = {
     reflect: false,
     hasChanged: notEqual
 };
-const microtaskPromise = new Promise((resolve) => resolve(true));
+const microtaskPromise = Promise.resolve(true);
 const STATE_HAS_UPDATED = 1;
 const STATE_UPDATE_REQUESTED = 1 << 2;
 const STATE_IS_REFLECTING_TO_ATTRIBUTE = 1 << 3;
@@ -100,6 +107,7 @@ export class UpdatingElement extends HTMLElement {
     }
     /**
      * Returns a list of attributes corresponding to the registered properties.
+     * @nocollapse
      */
     static get observedAttributes() {
         // note: piggy backing on this to ensure we're _finalized.
@@ -115,14 +123,14 @@ export class UpdatingElement extends HTMLElement {
         return attributes;
     }
     /**
-     * Creates a property accessor on the element prototype if one does not exist.
-     * The property setter calls the property's `hasChanged` property option
-     * or uses a strict identity check to determine whether or not to request
-     * an update.
+     * Ensures the private `_classProperties` property metadata is created.
+     * In addition to `_finalize` this is also called in `createProperty` to
+     * ensure the `@property` decorator can add property metadata.
      */
-    static createProperty(name, options = defaultPropertyDeclaration) {
+    /** @nocollapse */
+    static _ensureClassProperties() {
         // ensure private storage for property declarations.
-        if (!this.hasOwnProperty('_classProperties')) {
+        if (!this.hasOwnProperty(JSCompiler_renameProperty('_classProperties', this))) {
             this._classProperties = new Map();
             // NOTE: Workaround IE11 not supporting Map constructor argument.
             const superProperties = Object.getPrototypeOf(this)._classProperties;
@@ -130,6 +138,19 @@ export class UpdatingElement extends HTMLElement {
                 superProperties.forEach((v, k) => this._classProperties.set(k, v));
             }
         }
+    }
+    /**
+     * Creates a property accessor on the element prototype if one does not exist.
+     * The property setter calls the property's `hasChanged` property option
+     * or uses a strict identity check to determine whether or not to request
+     * an update.
+     * @nocollapse
+     */
+    static createProperty(name, options = defaultPropertyDeclaration) {
+        // Note, since this can be called by the `@property` decorator which
+        // is called before `_finalize`, we ensure storage exists for property
+        // metadata.
+        this._ensureClassProperties();
         this._classProperties.set(name, options);
         if (!options.noAccessor) {
             const superDesc = descriptorFromPrototype(name, this.prototype);
@@ -167,9 +188,11 @@ export class UpdatingElement extends HTMLElement {
     /**
      * Creates property accessors for registered properties and ensures
      * any superclasses are also finalized.
+     * @nocollapse
      */
     static _finalize() {
-        if (this.hasOwnProperty('_finalized') && this._finalized) {
+        if (this.hasOwnProperty(JSCompiler_renameProperty('finalized', this)) &&
+            this.finalized) {
             return;
         }
         // finalize any superclasses
@@ -177,14 +200,15 @@ export class UpdatingElement extends HTMLElement {
         if (typeof superCtor._finalize === 'function') {
             superCtor._finalize();
         }
-        this._finalized = true;
+        this.finalized = true;
+        this._ensureClassProperties();
         // initialize Map populated in observedAttributes
         this._attributeToPropertyMap = new Map();
         // make any properties
         // Note, only process "own" properties since this element will inherit
         // any properties defined on the superClass, and finalization ensures
         // the entire prototype chain is finalized.
-        if (this.hasOwnProperty('properties')) {
+        if (this.hasOwnProperty(JSCompiler_renameProperty('properties', this))) {
             const props = this.properties;
             // support symbols in properties (IE11 does not support this)
             const propKeys = [
@@ -202,6 +226,7 @@ export class UpdatingElement extends HTMLElement {
     }
     /**
      * Returns the property name for the given attribute `name`.
+     * @nocollapse
      */
     static _attributeNameForProperty(name, options) {
         const attribute = options.attribute;
@@ -216,6 +241,7 @@ export class UpdatingElement extends HTMLElement {
      * Returns true if a property should request an update.
      * Called when a property value is set and uses the `hasChanged`
      * option for the property if present or a strict identity check.
+     * @nocollapse
      */
     static _valueHasChanged(value, old, hasChanged = notEqual) {
         return hasChanged(value, old);
@@ -224,6 +250,7 @@ export class UpdatingElement extends HTMLElement {
      * Returns the property value for the given attribute value.
      * Called via the `attributeChangedCallback` and uses the property's
      * `converter` or `converter.fromAttribute` property option.
+     * @nocollapse
      */
     static _propertyValueFromAttribute(value, options) {
         const type = options.type;
@@ -237,6 +264,7 @@ export class UpdatingElement extends HTMLElement {
      * If this returns null, the attribute will be removed, otherwise the
      * attribute will be set to the value.
      * This uses the property's `reflect` and `type.toAttribute` property options.
+     * @nocollapse
      */
     static _propertyValueToAttribute(value, options) {
         if (options.reflect === undefined) {
@@ -249,14 +277,10 @@ export class UpdatingElement extends HTMLElement {
         return toAttribute(value, type);
     }
     /**
-     * Performs element initialization. By default this calls `createRenderRoot`
-     * to create the element `renderRoot` node and captures any pre-set values for
+     * Performs element initialization. By default captures any pre-set values for
      * registered properties.
      */
-    initialize() {
-        this.renderRoot = this.createRenderRoot();
-        this._saveInstanceProperties();
-    }
+    initialize() { this._saveInstanceProperties(); }
     /**
      * Fixes any properties set on the instance before upgrade time.
      * Otherwise these would shadow the accessor and break these properties.
@@ -291,19 +315,6 @@ export class UpdatingElement extends HTMLElement {
         }
         this._instanceProperties = undefined;
     }
-    /**
-     * Returns the node into which the element should render and by default
-     * creates and returns an open shadowRoot. Implement to customize where the
-     * element's DOM is rendered. For example, to render into the element's
-     * childNodes, return `this`.
-     * @returns {Element|DocumentFragment} Returns a node into which to render.
-     */
-    createRenderRoot() {
-        return this.attachShadow({ mode: 'open' });
-    }
-    /**
-     * Uses ShadyCSS to keep element DOM updated.
-     */
     connectedCallback() {
         this._updateState = this._updateState | STATE_HAS_CONNECTED;
         // Ensure connection triggers an update. Updates cannot complete before
@@ -316,12 +327,6 @@ export class UpdatingElement extends HTMLElement {
         }
         else {
             this.requestUpdate();
-        }
-        // Note, first update/render handles styleElement so we only call this if
-        // connected after first update.
-        if ((this._updateState & STATE_HAS_UPDATED) &&
-            window.ShadyCSS !== undefined) {
-            window.ShadyCSS.styleElement(this);
         }
     }
     /**
@@ -457,6 +462,7 @@ export class UpdatingElement extends HTMLElement {
     get _hasRequestedUpdate() {
         return (this._updateState & STATE_UPDATE_REQUESTED);
     }
+    get hasUpdated() { return (this._updateState & STATE_HAS_UPDATED); }
     /**
      * Performs an element update.
      *
@@ -465,7 +471,7 @@ export class UpdatingElement extends HTMLElement {
      *
      * ```
      * protected async performUpdate(): Promise<unknown> {
-     *   await new Promise((resolve) => requestAnimationFrame(() => resolve());
+     *   await new Promise((resolve) => requestAnimationFrame(() => resolve()));
      *   super.performUpdate();
      * }
      * ```
@@ -518,8 +524,8 @@ export class UpdatingElement extends HTMLElement {
     }
     /**
      * Updates the element. This method reflects property values to attributes.
-     * It can be overridden to render and keep updated DOM in the element's
-     * `renderRoot`. Setting properties inside this method will *not* trigger
+     * It can be overridden to render and keep updated element DOM.
+     * Setting properties inside this method will *not* trigger
      * another update.
      *
      * * @param _changedProperties Map of changed properties with old values
@@ -555,17 +561,7 @@ export class UpdatingElement extends HTMLElement {
     firstUpdated(_changedProperties) { }
 }
 /**
- * Maps attribute names to properties; for example `foobar` attribute
- * to `fooBar` property.
- */
-UpdatingElement._attributeToPropertyMap = new Map();
-/**
  * Marks class as having finished creating properties.
  */
-UpdatingElement._finalized = true;
-/**
- * Memoized list of all class properties, including any superclass properties.
- */
-UpdatingElement._classProperties = new Map();
-UpdatingElement.properties = {};
+UpdatingElement.finalized = true;
 //# sourceMappingURL=updating-element.js.map

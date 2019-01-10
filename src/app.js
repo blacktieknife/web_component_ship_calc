@@ -146,7 +146,6 @@ class ShipCostCalc extends LitElement {
         this.isLoading = true;
         ups.mockFetchRates(e.detail)
         .then(rates=>{
-            console.log("return rates ffrom ups", JSON.parse(rates));
             this.rates = JSON.parse(rates);
             this.isLoading = false;
         })
